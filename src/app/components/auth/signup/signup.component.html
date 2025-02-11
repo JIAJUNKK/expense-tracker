@@ -1,0 +1,67 @@
+<div class="auth-page">
+    <div class="auth-container">
+      <!-- Back Button -->
+      <div class="back-btn">
+        <button (click)="goBack()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+      </div>
+  
+      <!-- Title -->
+      <h1>Create an account</h1>
+  
+      <!-- Signup Form -->
+      <form>
+        <!-- Username -->
+        <div class="form-group">
+          <input type="text" id="username" placeholder=" " [(ngModel)]="username" />
+          <label for="username">Username</label>
+        </div>
+  
+        <!-- Email -->
+        <div class="form-group">
+          <input type="email" id="email" placeholder=" " [(ngModel)]="email" />
+          <label for="email">Email</label>
+        </div>
+  
+        <!-- Password -->
+        <div class="form-group password-group">
+          <input [type]="passwordVisible ? 'text' : 'password'" id="password" placeholder=" " [(ngModel)]="password" />
+          <label for="password">Password</label>
+          <span class="toggle-password" (click)="togglePasswordVisibility()">
+            <i [class]="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </span>
+        </div>
+  
+        <!-- Confirm Password -->
+        <div class="form-group password-group">
+          <input [type]="confirmPasswordVisible ? 'text' : 'password'" id="confirm-password" placeholder=" " [(ngModel)]="confirmPassword" />
+          <label for="confirm-password">Confirm Password</label>
+          <span class="toggle-password" (click)="toggleConfirmPasswordVisibility()">
+            <i [class]="confirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+          </span>
+        </div>
+  
+        <!-- Signup Button -->
+        <button class="signup-btn" (click)="signup()">Sign Up</button>
+      </form>
+  
+      <!-- Divider -->
+      <div class="divider">
+        <span></span> Or Sign Up with <span></span>
+      </div>
+  
+      <!-- Social Signup Buttons -->
+      <div class="social-login">
+        <button class="facebook"><i class="fab fa-facebook-f"></i></button>
+        <button class="google"><i class="fab fa-google"></i></button>
+        <button class="apple"><i class="fab fa-apple"></i></button>
+      </div>
+    </div>
+  
+    <!-- Login Redirect -->
+    <p class="register-link">
+      Already have an account? <a routerLink="/login">Login</a>
+    </p>
+</div>
+  

@@ -1,0 +1,22 @@
+.dashboard {
+    text-align: center;
+  
+    h1 {
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+  
+    .summary {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+  
+      .card {
+        flex: 1;
+        max-width: 300px;
+        margin: 10px;
+        text-align: center;
+      }
+    }
+  }
+  

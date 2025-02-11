@@ -1,0 +1,59 @@
+<div class="auth-page">
+  <div class="auth-container">
+    <!-- Back Button -->
+    <div class="back-btn">
+      <button (click)="goBack()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+    </div>
+
+    <!-- Title -->
+    <h1>Welcome back!</h1>
+
+    <!-- Login Form -->
+    <form>
+      <!-- Email Input with Floating Label -->
+      <div class="form-group">
+        <input type="email" id="email" placeholder=" " [(ngModel)]="email" />
+        <label for="email">Email</label>
+      </div>
+    
+      <!-- Password Input with Floating Label -->
+      <div class="form-group password-group">
+        <input [type]="passwordVisible ? 'text' : 'password'" id="password" placeholder=" " [(ngModel)]="password" />
+        <label for="password">Password</label>
+        <span class="toggle-password" (click)="togglePasswordVisibility()">
+          <i [class]="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+        </span>
+      </div>
+    
+      <!-- Forgot Password -->
+      <div class="forgot-password">
+        <a routerLink="/forgot-password">Forgot Password?</a>
+      </div>
+    
+      <!-- Login Button -->
+      <button class="login-btn" (click)="login()">Login</button>
+    </form>
+    
+
+    <!-- Divider -->
+    <div class="divider">
+      <span></span> Or Login with <span></span>
+    </div>
+
+    <!-- Social Login Buttons -->
+    <div class="social-login">
+      <button class="facebook"><i class="fab fa-facebook-f"></i></button>
+      <button class="google"><i class="fab fa-google"></i></button>
+      <button class="apple"><i class="fab fa-apple"></i></button>
+    </div>
+
+
+  </div>
+
+  <!-- Register Link -->
+  <p class="register-link">
+    Don't have an account? <a routerLink="/signup">Register Now</a>
+  </p>
+</div>

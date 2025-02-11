@@ -1,0 +1,32 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--dark);
+    color: var(--light-bg);
+    padding: 10px 20px;
+  
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+  
+    .nav-links {
+      list-style: none;
+      display: flex;
+  
+      li {
+        margin: 0 10px;
+  
+        a {
+          color: var(--light-bg);
+          transition: color 0.3s ease;
+        }
+  
+        a:hover {
+          color: var(--light-accent);
+        }
+      }
+    }
+  }
+  

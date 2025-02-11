@@ -1,0 +1,43 @@
+<div class="home-page">
+    <!-- Wrapper to Hide Other Cards -->
+    <div class="scroll-wrapper">
+        <!-- Scrollable Cards Section -->
+        <div class="scroll-container" (scroll)="onScroll($event)">
+          
+          <!-- Card 1: Budget Insights -->
+          <div class="budget-card">
+            <img src="assets/images/dummy-1.jpg" alt="Budget Overview">
+          </div>
+
+          <!-- Card 2: Income Overview -->
+          <div class="budget-card">
+            <img src="assets/images/dummy-1.jpg" alt="Budget Overview">
+          </div>
+
+          <!-- Card 3: Savings Progress -->
+          <div class="budget-card">
+            <img src="assets/images/dummy-1.jpg" alt="Budget Overview">
+          </div>
+          
+        </div>
+    </div>
+
+    <!-- Text Section (Dynamically Updated) -->
+    <div class="text-section">
+      <h1>{{ textTitle() }}</h1>
+      <p>{{ textDescription() }}</p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="login-btn" routerLink="/login">Sign In</button>
+      <button class="signup-btn" routerLink="/signup">Get Started →</button>
+    </div>
+
+    <!-- Pagination Indicator -->
+    <div class="pagination-indicator">
+      <span class="dot" [class.active]="currentCardIndex() === 0"></span>
+      <span class="dot" [class.active]="currentCardIndex() === 1"></span>
+      <span class="dot" [class.active]="currentCardIndex() === 2"></span>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+:root {
+    --dark: #192524;
+    --secondary-dark: #3C5759;
+    --neutral: #959D90;
+    --light-accent: #D1EBDB;
+    --neutral-bg: #D0D5CE;
+    --light-bg: #EFECE9;
+  }
+  
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--dark);
+  }
+  
+  a {
+    text-decoration: none;
+    color: var(--secondary-dark);
+  }
+  
+  h1, h2, h3 {
+    margin: 0;
+    font-weight: 600;
+  }
+  
+  .card {
+    background-color: var(--neutral-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  button {
+    background-color: var(--secondary-dark);
+    color: var(--light-bg);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: var(--dark);
+    transform: scale(1.05);
+  }
+  
