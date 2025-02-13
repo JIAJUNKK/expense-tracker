@@ -14,20 +14,20 @@
       <form>
         <!-- Username -->
         <div class="form-group">
-          <input type="text" id="username" placeholder=" " [(ngModel)]="username" />
           <label for="username">Username</label>
+          <input type="text" id="username" name="username" [(ngModel)]="username" />
         </div>
   
         <!-- Email -->
         <div class="form-group">
-          <input type="email" id="email" placeholder=" " [(ngModel)]="email" />
           <label for="email">Email</label>
+          <input type="email" id="email" name="email" [(ngModel)]="email" />
         </div>
   
         <!-- Password -->
         <div class="form-group password-group">
-          <input [type]="passwordVisible ? 'text' : 'password'" id="password" placeholder=" " [(ngModel)]="password" />
           <label for="password">Password</label>
+          <input [type]="passwordVisible ? 'text' : 'password'" id="password" name="password" [(ngModel)]="password" />
           <span class="toggle-password" (click)="togglePasswordVisibility()">
             <i [class]="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
@@ -35,8 +35,8 @@
   
         <!-- Confirm Password -->
         <div class="form-group password-group">
-          <input [type]="confirmPasswordVisible ? 'text' : 'password'" id="confirm-password" placeholder=" " [(ngModel)]="confirmPassword" />
           <label for="confirm-password">Confirm Password</label>
+          <input [type]="confirmPasswordVisible ? 'text' : 'password'" id="confirm-password" placeholder=" " [(ngModel)]="confirmPassword" />
           <span class="toggle-password" (click)="toggleConfirmPasswordVisibility()">
             <i [class]="confirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
