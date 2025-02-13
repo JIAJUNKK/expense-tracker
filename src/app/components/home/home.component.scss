@@ -11,7 +11,7 @@
 
     // ✅ Wrapper to Hide Other Cards
     .scroll-wrapper {
-        width: 320px; // Matches card width
+        width: 100%; // Matches card width
         overflow: hidden;
         display: flex;
         justify-content: center;
