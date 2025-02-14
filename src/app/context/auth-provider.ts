@@ -1,5 +1,7 @@
-import { Injectable, signal } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
+import { Injectable, signal, effect } from '@angular/core';
+import { AuthService } from '../services/firebase/Authentication/auth.service';
+import { UserService } from '../services/firebase/Firestore/user.service';
+import { User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -8,17 +10,22 @@ import { Router } from '@angular/router';
 export class AuthProvider {
   user = signal<User | null>(null); // Global state for the user
 
-  constructor(private auth: Auth, private router: Router) {
-    // Listen for auth state changes
-    this.auth.onAuthStateChanged((user) => {
-      this.user.set(user);
+  constructor(private authService: AuthService, private userService: UserService, private router: Router) {
+    // Automatically track user state changes using effect()
+    effect(() => {
+      const authUser = this.authService.user(); // Read signal value
+      if (authUser) {
+        this.user.set(authUser);
+      } else {
+        this.user.set(null);
+        this.router.navigate(['/']); // Redirect to home if not logged in
+      }
     });
   }
 
   async login(email: string, password: string): Promise<void> {
     try {
-      await signInWithEmailAndPassword(this.auth, email, password);
-      this.router.navigate(['/dashboard']);
+      await this.authService.login(email, password);
     } catch (error) {
       console.error('Login failed', error);
     }
@@ -26,9 +33,7 @@ export class AuthProvider {
 
   async signup(username: string, email: string, password: string): Promise<void> {
     try {
-      // create a method to store username to firestore. 
-      await createUserWithEmailAndPassword(this.auth, email, password);
-      this.router.navigate(['/dashboard']);
+      await this.authService.signup(username, email, password);
     } catch (error) {
       console.error('Signup failed', error);
     }
@@ -36,8 +41,7 @@ export class AuthProvider {
 
   async logout(): Promise<void> {
     try {
-      await signOut(this.auth);
-      this.router.navigate(['/login']);
+      await this.authService.logout();
     } catch (error) {
       console.error('Logout failed', error);
     }

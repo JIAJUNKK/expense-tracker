@@ -1,5 +1,6 @@
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyBe75QSL5wwDujK-qiQiaoRPWVnoosQXXk",
@@ -15,4 +16,5 @@ export const firebaseConfig = {
 export const firebaseProviders = [
   provideFirebaseApp(() => initializeApp(firebaseConfig)),
   provideAuth(() => getAuth()),
+  provideFirestore(() => getFirestore()),
 ];

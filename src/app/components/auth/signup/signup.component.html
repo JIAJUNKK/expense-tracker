@@ -36,7 +36,7 @@
         <!-- Confirm Password -->
         <div class="form-group password-group">
           <label for="confirm-password">Confirm Password</label>
-          <input [type]="confirmPasswordVisible ? 'text' : 'password'" id="confirm-password" placeholder=" " [(ngModel)]="confirmPassword" />
+          <input [type]="confirmPasswordVisible ? 'text' : 'password'" id="confirm-password" name="confirm-password" [(ngModel)]="confirmPassword" />
           <span class="toggle-password" (click)="toggleConfirmPasswordVisibility()">
             <i [class]="confirmPasswordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
           </span>
