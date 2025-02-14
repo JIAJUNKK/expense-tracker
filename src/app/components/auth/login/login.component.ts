@@ -29,6 +29,14 @@ export class LoginComponent {
     await this.authProvider.login(this.email, this.password);
   }
 
+  async googleSignIn() {
+    try {
+      await this.authProvider.handleGoogleSignIn();
+    } catch (error) {
+      console.error('Google Sign-In failed', error);
+    }
+  }
+
   goBack() {
     this.router.navigate(['/']);
   }

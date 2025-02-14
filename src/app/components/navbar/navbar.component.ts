@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
+import { AuthProvider } from '../../context/auth-provider';
 
 @Component({
   selector: 'navbar',
@@ -9,9 +10,16 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  constructor() {}
+  private authProvider = inject(AuthProvider);
+  private router = inject(Router);
 
   navigateToDashboard() {
     console.log('Navigating to dashboard');
   }
+  
+  async logout() {
+    await this.authProvider.logout();
+    this.router.navigate(['/login']);
+  }
+
 }

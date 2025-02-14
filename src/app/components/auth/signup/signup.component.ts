@@ -39,4 +39,13 @@ export class SignupComponent {
     }
     await this.authProvider.signup(this.username, this.email, this.password);
   }
+
+  async googleSignIn() {
+    try {
+      await this.authProvider.handleGoogleSignIn();
+    } catch (error) {
+      console.error('Google Sign-In failed', error);
+    }
+  }
+  
 }
