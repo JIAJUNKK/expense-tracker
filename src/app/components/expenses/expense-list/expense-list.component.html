@@ -1,0 +1,17 @@
+<ul class="expense-list">
+  <li *ngFor="let expense of expenses()">
+    <div class="expense-item">
+      <div class="expense-icon" [style.background]="expense.color">
+        <i [class]="expense.icon"></i>
+      </div>
+      <div class="expense-info">
+        <p class="expense-category">{{ expense.category }}</p>
+        <p class="expense-type">{{ expense.type }}</p>
+      </div>
+      <div class="expense-amount">
+        <p class="amount-value">${{ expense.amount }}</p>
+        <p class="amount-percentage">12%</p> 
+      </div>
+    </div>
+  </li>
+</ul>

@@ -5,7 +5,7 @@ import { AuthProvider } from '../../context/auth-provider';
 @Component({
   selector: 'navbar',
   standalone: true,
-  imports: [RouterModule], // Import RouterModule
+  imports: [RouterModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
@@ -17,6 +17,10 @@ export class NavbarComponent {
     console.log('Navigating to dashboard');
   }
   
+  quickAddExpense() {
+    this.router.navigate(['/expenses/add']);
+  }
+
   async logout() {
     await this.authProvider.logout();
     this.router.navigate(['/login']);
