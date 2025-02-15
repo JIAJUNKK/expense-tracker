@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthProvider } from '../../context/auth-provider';
+import { GlobalService } from '../../services/shared/global.service';
 
 @Component({
   selector: 'navbar',
@@ -11,14 +12,15 @@ import { AuthProvider } from '../../context/auth-provider';
 })
 export class NavbarComponent {
   private authProvider = inject(AuthProvider);
+  private modalService = inject(GlobalService);
   private router = inject(Router);
 
   navigateToDashboard() {
     console.log('Navigating to dashboard');
   }
   
-  quickAddExpense() {
-    this.router.navigate(['/expenses/add']);
+  toggleAddExpenseModal() {
+    this.modalService.openExpenseModal();
   }
 
   async logout() {

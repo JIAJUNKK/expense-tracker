@@ -1,6 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ExpenseService, Expense } from '../../../services/firebase/Firestore/expense.service';
+import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
+import { Expense } from '../../../utils/expense.model';
 
 @Component({
   selector: 'app-expense-list',
@@ -16,6 +17,7 @@ export class ExpenseListComponent implements OnInit {
   async fetchExpenses() {
     const fetchedExpenses = await this.expenseService.fetchExpenses();
     this.expenses.set(fetchedExpenses);
+    console.log(fetchedExpenses);
   }
 
   ngOnInit() {

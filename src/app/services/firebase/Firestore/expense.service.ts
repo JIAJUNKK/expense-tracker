@@ -1,17 +1,7 @@
 import { Injectable, inject, Injector, runInInjectionContext } from '@angular/core';
-import { Firestore, collection, getDocs, query, addDoc } from '@angular/fire/firestore';
+import { Firestore, collection, getDocs, query, addDoc, Timestamp} from '@angular/fire/firestore';
 import { AuthProvider } from '../../../context/auth-provider';
-
-export interface Expense {
-  id?: string;
-  type: string;
-  category: string;
-  amount: number;
-  date: string;
-  notes?: string;
-  color?: string;
-  icon?: string;
-}
+import { Expense } from '../../../utils/expense.model';
 
 @Injectable({
   providedIn: 'root',
@@ -44,9 +34,10 @@ export class ExpenseService {
         return {
           id: doc.id,
           ...data,
-          category: data['type'],
-          color: ExpenseHelper.getExpenseColor(data['type']),
-          icon: ExpenseHelper.getExpenseIcon(data['type'])
+          category: data['category'],
+          item: data['item'],
+          color: ExpenseHelper.getExpenseColor(data['category']),
+          icon: ExpenseHelper.getExpenseIcon(data['category'])
         };
       });
     });
@@ -55,25 +46,33 @@ export class ExpenseService {
   async getExpenseSummary() {
     return runInInjectionContext(this.injector, async () => { 
       const expenses = await this.fetchExpenses();
+      
       const today = new Date().toISOString().split('T')[0];
-
+  
       const startOfWeek = new Date();
       startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Set to Sunday
-
+      startOfWeek.setHours(0, 0, 0, 0); // Reset time to midnight
+  
       const totalDay = expenses
-        .filter(expense => expense.date.startsWith(today))
+        .filter(expense => {
+          const expenseDate = (expense.date as Timestamp).toDate();
+          return expenseDate.toISOString().split('T')[0] === today;
+        })
         .reduce((sum, exp) => sum + exp.amount, 0)
         .toFixed(2);
-
+  
       const totalWeek = expenses
-        .filter(expense => new Date(expense.date) >= startOfWeek)
+        .filter(expense => {
+          const expenseDate = (expense.date as Timestamp).toDate();
+          return expenseDate >= startOfWeek;
+        })
         .reduce((sum, exp) => sum + exp.amount, 0)
         .toFixed(2);
-
+  
       const totalMonth = expenses
         .reduce((sum, exp) => sum + exp.amount, 0)
         .toFixed(2);
-
+  
       return { 
         totalDay: parseFloat(totalDay), 
         totalWeek: parseFloat(totalWeek), 
@@ -95,9 +94,6 @@ export class ExpenseService {
   }
 }
 
-/**
- * 🔹 Utility class for expense-related helper functions
- */
 export class ExpenseHelper {
   static getExpenseColor(type: string): string {
     const colorMap: { [key: string]: string } = {

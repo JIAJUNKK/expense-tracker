@@ -1,0 +1,14 @@
+<ng-container *ngIf="!authProvider.isSettingUser(); else loading">
+    <ng-container *ngIf="authProvider.user(); else redirectToLogin">
+      <router-outlet></router-outlet> 
+    </ng-container>
+  </ng-container>
+  
+  <ng-template #loading>
+    <p>Loading...</p> 
+  </ng-template>
+  
+  <ng-template #redirectToLogin>
+    {{ navigateToLogin() }}
+  </ng-template>
+  

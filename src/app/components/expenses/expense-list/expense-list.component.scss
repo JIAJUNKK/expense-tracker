@@ -12,7 +12,6 @@
       border-radius: 16px;
       display: flex;
       align-items: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
       transition: transform 0.2s ease;
   
       &:hover {
@@ -43,29 +42,32 @@
   
         .expense-category {
           font-weight: bold;
-          font-size: 16px;
+          font-size: 18px;
           color: var(--dark);
+          margin: 0;
         }
   
         .expense-type {
           font-size: 14px;
           color: var(--secondary-dark);
+          margin: 5px 0;
         }
       }
   
       .expense-amount {
         text-align: right;
-  
+        
         .amount-value {
           font-weight: bold;
-          font-size: 16px;
+          font-size: 18px;
           color: var(--dark);
+          margin: 0;
         }
   
         .amount-percentage {
-          font-size: 12px;
+          font-size: 14px;
           color: var(--secondary-dark);
-        }
+          margin: 5px 0;        }
       }
     }
   }
