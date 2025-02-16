@@ -2,7 +2,7 @@ import { Component, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Timestamp } from 'firebase/firestore';
-import { Expense } from '../../../utils/expense.model';
+import { Expense } from '../../../utils/app.model';
 
 import { ExpenseHelper } from '../../../services/firebase/Firestore/expense.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
@@ -17,11 +17,13 @@ import { GlobalService } from '../../../services/shared/global.service';
 })
 export class AddExpenseModalComponent {
   private expenseService = inject(ExpenseService);
+  private globalService = inject(GlobalService);
   public modalService = inject(GlobalService);
   private touchStartY = 0;
   private currentTranslateY = 0;
   public modalStyle = {};
 
+  currencySymbol = this.globalService.userCurrency().symbol;
   selectedDateText: string = "Select Date";
   categories: string[] = ['Transport', 'Groceries', 'Bill', 'Entertainment', 'Meal', 'Travel'];
   selectedCategoryIcon: string = ExpenseHelper.getExpenseIcon(this.categories[0]);

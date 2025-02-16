@@ -1,5 +1,6 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { GlobalService } from '../../../services/shared/global.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
 
 @Component({
@@ -11,10 +12,13 @@ import { ExpenseService } from '../../../services/firebase/Firestore/expense.ser
 })
 export class ExpenseSummaryComponent implements OnInit {
   private expenseService = inject(ExpenseService);
+  private globalService = inject(GlobalService);
 
-  totalDay = signal(0);
-  totalWeek = signal(0);
-  totalMonth = signal(0);
+  currencySymbol = computed(() => this.globalService.userCurrency().symbol);
+
+  totalDay = signal('0.00'); 
+  totalWeek = signal('0.00');
+  totalMonth = signal('0.00');
 
   async fetchExpenseSummary() {
     const summary = await this.expenseService.getExpenseSummary();

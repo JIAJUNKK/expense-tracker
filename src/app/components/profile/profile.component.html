@@ -1,1 +1,40 @@
-<p>profile works!</p>
+<div class="profile-container">
+    <h2>Profile</h2>
+  
+    <!-- User Info Section -->
+    <div class="user-info">
+      <p><strong>Email:</strong> {{ userInfo?.email }}</p>
+      <p><strong>Name:</strong> {{ userInfo?.name }}</p>
+    </div>
+  
+    <!-- Currency Selection -->
+    <div class="currency-section">
+      <label for="currency">Preferred Currency:</label>
+      <p>Currently Selected: <strong>{{ selectedCurrency?.abbreviation }}</strong></p>
+  
+      <select id="currency" [(ngModel)]="selectedCurrencyAbbreviation" (change)="updateCurrency($event)">
+        <option *ngFor="let currencyItem of currenciesList" [value]="currencyItem.abbreviation">
+          {{ currencyItem.symbol }} - {{ currencyItem.name }}
+        </option>
+      </select>
+      
+    </div>
+  
+    <!-- Custom Categories -->
+    <div class="categories-section">
+      <label>Custom Categories:</label>
+      <ul>
+        <li *ngFor="let category of categories">{{ category }}</li>
+      </ul>
+  
+      <div class="category-input">
+        <input 
+          type="text" 
+          [(ngModel)]="newCategory" 
+          placeholder="Add new category"
+        />
+        <button (click)="addCategory(newCategory)" [disabled]="!newCategory.trim()">Add</button>
+      </div>
+    </div>
+</div>
+  

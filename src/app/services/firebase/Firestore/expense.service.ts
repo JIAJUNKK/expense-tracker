@@ -1,7 +1,7 @@
 import { Injectable, inject, Injector, runInInjectionContext } from '@angular/core';
 import { Firestore, collection, getDocs, query, addDoc, Timestamp} from '@angular/fire/firestore';
 import { AuthProvider } from '../../../context/auth-provider';
-import { Expense } from '../../../utils/expense.model';
+import { Expense } from '../../../utils/app.model';
 
 @Injectable({
   providedIn: 'root',
@@ -74,9 +74,9 @@ export class ExpenseService {
         .toFixed(2);
   
       return { 
-        totalDay: parseFloat(totalDay), 
-        totalWeek: parseFloat(totalWeek), 
-        totalMonth: parseFloat(totalMonth) 
+        totalDay, 
+        totalWeek, 
+        totalMonth,
       };
     });
   }

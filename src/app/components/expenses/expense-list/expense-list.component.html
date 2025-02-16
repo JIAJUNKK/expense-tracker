@@ -9,8 +9,7 @@
         <p class="expense-type">{{ expense.item }}</p>
       </div>
       <div class="expense-amount">
-        <p class="amount-value">${{ expense.amount }}</p>
-        <p class="amount-percentage">12%</p> 
+        <p class="amount-value">{{currencySymbol()}}{{ expense.amount.toFixed(2) }}</p>
       </div>
     </div>
   </li>

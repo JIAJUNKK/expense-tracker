@@ -10,3 +10,9 @@ export interface Expense {
   color?: string;
   icon?: string;
 }
+
+export interface Currency {
+  name: string;
+  abbreviation: string;
+  symbol: string;
+}
