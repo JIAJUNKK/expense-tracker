@@ -62,6 +62,13 @@ export class ProfileComponent implements OnInit {
     this.categories.push(newCategory);
   }
 
+  async deleteCategory(category: string) {
+    if (!this.userId) return;
+    
+    await this.userService.deleteUserCategory(this.userId, category);
+    this.categories = this.categories.filter(cat => cat !== category); 
+  }
+
   get selectedCurrencyAbbreviation(): string {
     return this.selectedCurrency ? this.selectedCurrency.abbreviation : '';
   }

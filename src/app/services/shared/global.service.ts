@@ -7,11 +7,8 @@ import { AuthProvider } from '../../context/auth-provider';
 })
 export class GlobalService {
   isExpenseModalOpen = signal(false);
-  userCurrency = 
-  signal
-  <
-  { abbreviation: string, symbol: string }
-  >({ abbreviation: 'USD', symbol: '$' });
+  userCurrency = signal<{ abbreviation: string, symbol: string }>({ abbreviation: 'USD', symbol: '$' });
+  userCategories = signal<string[]>([]);
 
   private userService = inject(UserService);
   private authProvider = inject(AuthProvider);
@@ -29,6 +26,7 @@ export class GlobalService {
       const userId = this.authProvider.user()?.uid;
       if (userId) {
         this.fetchUserCurrency(userId);
+        this.fetchUserCategories(userId);
       }
     });
   }
@@ -45,5 +43,12 @@ export class GlobalService {
     if (!userId) return;
     const userCurrency = await this.userService.getUserCurrency(userId);
     this.userCurrency.set(userCurrency);
+  }
+
+  async fetchUserCategories(userId: string) {
+    if (!userId) return;
+    const categories = await this.userService.getUserCategories(userId);
+    console.log(categories)
+    this.userCategories.set(categories); 
   }
 }

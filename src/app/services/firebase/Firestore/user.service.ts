@@ -1,5 +1,5 @@
 import { Injectable, inject, Injector, runInInjectionContext } from '@angular/core';
-import { Firestore, collection, getDocs, getDoc, setDoc, doc } from '@angular/fire/firestore';
+import { Firestore, collection, getDocs, getDoc, setDoc, deleteDoc, doc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -73,6 +73,15 @@ export class UserService {
 
   async addUserCategory(userId: string, category: string): Promise<void> {
     return this.userHelper.addUserCategory(userId, category);
+  }
+
+  async deleteUserCategory(userId: string, category: string): Promise<void> {
+    if (!userId || !category.trim()) return;
+  
+    return runInInjectionContext(this.injector, async () => {
+      const categoryRef = doc(this.firestore, `categories/${userId}/list`, category);
+      await deleteDoc(categoryRef);
+    });
   }
 }
 

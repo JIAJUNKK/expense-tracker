@@ -25,7 +25,7 @@ export class AddExpenseModalComponent {
 
   currencySymbol = this.globalService.userCurrency().symbol;
   selectedDateText: string = "Select Date";
-  categories: string[] = ['Transport', 'Groceries', 'Bill', 'Entertainment', 'Meal', 'Travel'];
+  categories = this.globalService.userCategories();
   selectedCategoryIcon: string = ExpenseHelper.getExpenseIcon(this.categories[0]);
   today = new Date().toISOString().split('T')[0];
 
@@ -123,7 +123,6 @@ export class AddExpenseModalComponent {
   
     input.click();
   }
-
 
   openDatePicker() {
     const dateInput = document.querySelector('.hidden-date-input') as HTMLInputElement;
