@@ -1,5 +1,9 @@
 import { Component, inject, AfterViewInit } from '@angular/core';
 import Chart from 'chart.js/auto';
+import { GlobalService } from '../../../services/shared/global.service';
+import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
+import { ExpenseHelper } from '../../../services/firebase/Firestore/expense.service';
+import { Expense } from '../../../utils/app.model';
 
 @Component({
   selector: 'app-expense-chart',
@@ -8,25 +12,80 @@ import Chart from 'chart.js/auto';
   styleUrls: ['./expense-chart.component.scss']
 })
 export class ExpenseChartComponent implements AfterViewInit {
-  
-  ngAfterViewInit() {
+  private expenseService = inject(ExpenseService);
+  private globalService = inject(GlobalService);
+  private chart: Chart | null = null;
+
+  async ngAfterViewInit() {
     const ctx = document.getElementById('expenseChart') as HTMLCanvasElement;
-    new Chart(ctx, {
+
+    const expenses = await this.expenseService.fetchExpenses();
+    const categoryTotals = this.calculateCategoryTotals(expenses);
+
+    const currencySymbol = this.globalService.userCurrency().symbol;
+    this.chart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['1', '5', '10', '15', '20', '25', '31'],
+        labels: categoryTotals.map(ct => ct.category), // ✅ Y-Axis: Categories
         datasets: [
           {
-            label: 'Expenses',
-            data: [12, 3, 5, 32, 21, 13, 5],
-            backgroundColor: ['#F18C8E', '#568EA6', '#F1D1B5', '#F0B7A4', '#305F72', '#F18C8E', '#F1D1B5']
+            label: `Total Spendings (${currencySymbol})`,
+            data: categoryTotals.map(ct => ct.total), // ✅ X-Axis: Spendings
+            backgroundColor: categoryTotals.map(ct => ExpenseHelper.getExpenseColor(ct.category)),
+            categoryPercentage: 0.8, 
+            borderRadius: 5,
           }
         ]
       },
       options: {
+        indexAxis: 'y', // ✅ Horizontal bar chart
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: `Spendings (${currencySymbol})`,
+            },
+          },
+          y: {
+            title: {
+              display: true,
+            },
+            ticks: {
+              autoSkip: false,
+              font: {
+                size: 10 
+              },
+            },
+            
+          }
+        },
+        plugins: {
+          legend: {
+            display: true
+          }
+        },
+        layout: {
+          padding: {
+            right: 0, 
+            left: 0,
+          },
+        }
       }
     });
+  }
+
+  calculateCategoryTotals(expenses: Expense[]) {
+    const categoryMap: { [category: string]: number } = {};
+
+    expenses.forEach(expense => {
+      if (!categoryMap[expense.category]) {
+        categoryMap[expense.category] = 0;
+      }
+      categoryMap[expense.category] += expense.amount;
+    });
+
+    return Object.entries(categoryMap).map(([category, total]) => ({ category, total }));
   }
 }
