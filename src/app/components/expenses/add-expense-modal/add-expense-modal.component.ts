@@ -34,7 +34,6 @@ export class AddExpenseModalComponent {
     item: '',
     amount: 0,
     date: Timestamp.fromDate(new Date()),
-    icon: this.selectedCategoryIcon,
     notes: '', 
   };
 

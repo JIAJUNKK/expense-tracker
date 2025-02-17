@@ -1,31 +1,20 @@
 <div class="expenses-page">
   <!-- 🔹 Top Section -->
-  <div class="top-bar">
-    <button class="menu-btn">
-      <i class="fas fa-bars"></i>
-    </button>
-    <div class="balance-info">
-      <h2>$32,500.00</h2>
-      <p>Total Balance <i class="fas fa-chevron-down"></i></p>
-    </div>
-    <button class="notification-btn">
-      <i class="fas fa-bell"></i>
-    </button>
-  </div>
+  <app-expense-header></app-expense-header>
 
   <!-- 🔹 Expense/Income Tabs -->
   <div class="tab-selector">
     <button class="active">Expenses</button>
-    <button>Income</button>
-    <button>June <i class="fas fa-chevron-down"></i></button>
+    <app-expense-filter-bar (filterChange)="onFilterChange($event)"></app-expense-filter-bar>
   </div>
 
+
   <!-- 🔹 Expense Chart -->
-  <app-expense-chart></app-expense-chart>
+  <app-expense-chart [filter]="filter"></app-expense-chart>
 
   <!-- 🔹 Expense Summary (Day, Week, Month) -->
-  <app-expense-summary></app-expense-summary>
+  <app-expense-summary [filter]="filter"></app-expense-summary>
 
   <!-- 🔹 Expense List -->
-  <app-expense-list></app-expense-list>
+  <app-expense-list [filter]="filter"></app-expense-list>
 </div>

@@ -1,4 +1,4 @@
-import { Component, inject, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Input, WritableSignal, inject, effect, runInInjectionContext, Injector} from '@angular/core';
 import Chart from 'chart.js/auto';
 import { GlobalService } from '../../../services/shared/global.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
@@ -12,17 +12,28 @@ import { Expense } from '../../../utils/app.model';
   styleUrls: ['./expense-chart.component.scss']
 })
 export class ExpenseChartComponent implements AfterViewInit {
+  private injector = inject(Injector);
   private expenseService = inject(ExpenseService);
   private globalService = inject(GlobalService);
   private chart: Chart | null = null;
+  @Input() filter!: WritableSignal<string>; 
 
-  async ngAfterViewInit() {
+  constructor() {
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        this.updateChart(); 
+      });
+    });
+  }
+  async updateChart() {
     const ctx = document.getElementById('expenseChart') as HTMLCanvasElement;
 
-    const expenses = await this.expenseService.fetchExpenses();
+    const expenses = await this.expenseService.fetchExpenses(this.filter());
     const categoryTotals = this.calculateCategoryTotals(expenses);
-
     const currencySymbol = this.globalService.userCurrency().symbol;
+
+    if (this.chart) this.chart.destroy();
+
     this.chart = new Chart(ctx, {
       type: 'bar',
       data: {
@@ -34,6 +45,7 @@ export class ExpenseChartComponent implements AfterViewInit {
             backgroundColor: categoryTotals.map(ct => ExpenseHelper.getExpenseColor(ct.category)),
             categoryPercentage: 0.8, 
             borderRadius: 5,
+            barThickness: 20,
           }
         ]
       },
@@ -88,4 +100,8 @@ export class ExpenseChartComponent implements AfterViewInit {
 
     return Object.entries(categoryMap).map(([category, total]) => ({ category, total }));
   }
+
+  ngAfterViewInit() {
+    this.updateChart();
+  }  
 }
