@@ -1,0 +1,27 @@
+<div class="filter-bar">
+  <!-- Month Dropdown -->
+  <div class="dropdown">
+    <button class="dropdown-btn" (click)="toggleDropdown('month')">
+      {{ selectedMonth() }}
+      <i class="fas fa-chevron-down icon" [class.rotate]="isMonthDropdownOpen()"></i>
+    </button>
+    <ul class="dropdown-menu" [class.show]="isMonthDropdownOpen()">
+      <li *ngFor="let month of months" (click)="selectMonth(month)">
+        {{ month }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Year Dropdown -->
+  <div class="dropdown">
+    <button class="dropdown-btn" (click)="toggleDropdown('year')">
+      {{ selectedYear() }}
+      <i class="fas fa-chevron-down icon" [class.rotate]="isYearDropdownOpen()"></i>
+    </button>
+    <ul class="dropdown-menu" [class.show]="isYearDropdownOpen()">
+      <li *ngFor="let year of years" (click)="selectYear(year)">
+        {{ year }}
+      </li>
+    </ul>
+  </div>
+</div>

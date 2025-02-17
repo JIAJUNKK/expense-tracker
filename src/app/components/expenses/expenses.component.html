@@ -1,0 +1,20 @@
+<div class="expenses-page">
+  <!-- 🔹 Top Section -->
+  <app-expense-header></app-expense-header>
+
+  <!-- 🔹 Expense/Income Tabs -->
+  <div class="tab-selector">
+    <button class="active">Expenses</button>
+    <app-expense-filter-bar (filterChange)="onFilterChange($event)"></app-expense-filter-bar>
+  </div>
+
+
+  <!-- 🔹 Expense Chart -->
+  <app-expense-chart [filter]="filter"></app-expense-chart>
+
+  <!-- 🔹 Expense Summary (Day, Week, Month) -->
+  <app-expense-summary [filter]="filter"></app-expense-summary>
+
+  <!-- 🔹 Expense List -->
+  <app-expense-list [filter]="filter"></app-expense-list>
+</div>

@@ -1,32 +1,78 @@
 .navbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--dark);
+  color: var(--light-bg);
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+
+  .nav-links {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
-    background-color: var(--dark);
-    color: var(--light-bg);
-    padding: 10px 20px;
-  
-    .logo {
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-  
-    .nav-links {
-      list-style: none;
+    width: 100%;
+    padding: 0;
+    list-style: none;
+
+    li {
+      flex: 1;
       display: flex;
-  
-      li {
-        margin: 0 10px;
-  
-        a {
-          color: var(--light-bg);
-          transition: color 0.3s ease;
+      justify-content: center;
+      align-items: center;
+
+      a {
+        text-decoration: none;
+        color: var(--light-bg);
+        font-size: 11px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: color 0.3s ease;
+
+        i {
+          font-size: 22px;
+          margin-bottom: 3px;
         }
-  
-        a:hover {
+
+        &:hover,
+        &.active {
           color: var(--light-accent);
         }
       }
     }
+
+    // Floating Add Button Styling
+    .add-btn {
+      position: absolute;
+      bottom: 55px; // Adjust position slightly above the navbar
+      left: 50%;
+      transform: translateX(-50%);
+      
+      button {
+        background-color: var(--secondary-dark);
+        border: none;
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        color: white;
+        font-size: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+        transition: background 0.3s ease, transform 0.2s ease;
+
+        &:hover {
+          background-color: var(--dark);
+          transform: scale(1.15);
+        }
+      }
+    }
   }
-  
+}

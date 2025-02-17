@@ -1,9 +1,39 @@
 <nav class="navbar">
-  <div class="logo">Expense Tracker</div>
   <ul class="nav-links">
-    <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
-    <li><a routerLink="/transactions" routerLinkActive="active">Transactions</a></li>
-    <li><a routerLink="/settings" routerLinkActive="active">Settings</a></li>
-    <li><a (click)="logout()" routerLinkActive="active">Logout</a></li>
+    <li>
+      <a routerLink="/dashboard" routerLinkActive="active">
+        <i class="fas fa-home"></i> <!-- Home Icon -->
+        <span>Home</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/expenses" routerLinkActive="active">
+        <i class="fas fa-receipt"></i> <!-- Expenses Icon -->
+        <span>Expenses</span>
+      </a>
+    </li>
+
+    <!-- Floating Add Button 
+    <li class="add-btn">
+    -->
+    <li>
+      <button (click)="toggleAddExpenseModal()">
+        <i class="fas fa-plus"></i> <!-- Add Icon -->
+      </button>
+    </li>
+
+    <li>
+      <a routerLink="/profile" routerLinkActive="active">
+        <i class="fas fa-user"></i> <!-- Profile Icon -->
+        <span>Profile</span>
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/profile" routerLinkActive="active">
+        <i class="fas fa-user"></i> <!-- Profile Icon -->
+        <span>Dummy Icon</span>
+      </a>
+    </li>
   </ul>
 </nav>

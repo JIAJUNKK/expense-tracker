@@ -4,7 +4,8 @@
     --neutral: #959D90;
     --light-accent: #D1EBDB;
     --neutral-bg: #D0D5CE;
-    --light-bg: #EFECE9;
+    --light-bg: white;
+    --negative-bg: lightgray;
   }
   
   body {
@@ -47,8 +48,8 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
   }
   
-  button:hover {
-    background-color: var(--dark);
-    transform: scale(1.05);
+  button:active {
+    background-color: var(--dark); 
+    transform: scale(0.95);
   }
   

@@ -1,0 +1,16 @@
+<ul class="expense-list">
+  <li *ngFor="let expense of expenses()">
+    <div class="expense-item">
+      <div class="expense-icon" [style.background]="expense.color">
+        <i [class]="expense.icon"></i>
+      </div>
+      <div class="expense-info">
+        <p class="expense-category">{{ expense.category }}</p>
+        <p class="expense-type">{{ expense.item }}</p>
+      </div>
+      <div class="expense-amount">
+        <p class="amount-value">{{currencySymbol()}}{{ expense.amount.toFixed(2) }}</p>
+      </div>
+    </div>
+  </li>
+</ul>

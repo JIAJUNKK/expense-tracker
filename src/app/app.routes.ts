@@ -3,9 +3,10 @@ import { PrivateRoutes } from './routes/private.routes';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { SignupComponent } from './components/auth/signup/signup.component';
+
+import { ExpensesComponent } from './components/expenses/expenses.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { TransactionsComponent } from './components/transactions/transactions.component';
-import { SettingsComponent } from './components/settings/settings.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 export const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,8 +18,8 @@ export const appRoutes: Routes = [
     component: PrivateRoutes,
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'transactions', component: TransactionsComponent },
-      { path: 'settings', component: SettingsComponent }
+      { path: 'expenses', component: ExpensesComponent },
+      { path: 'profile', component: ProfileComponent },
     ]
   }
 ];

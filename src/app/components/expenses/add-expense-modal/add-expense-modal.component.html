@@ -1,0 +1,69 @@
+<div class="modal-overlay" *ngIf="modalService.isExpenseModalOpen()">
+  <div class="modal"
+       [ngStyle]="modalStyle"
+       (touchstart)="onTouchStart($event)"
+       (touchmove)="onTouchMove($event)"
+       (touchend)="onTouchEnd()">
+    
+    <div class="handle"></div>
+
+    <!-- Item & Category Selection -->
+    <div class="selectors">
+      <input type="text" [(ngModel)]="expense.item" placeholder="Enter item" class="selector item-input"/>
+      
+      <div class="category-container">
+        <div>
+          <i class="{{ selectedCategoryIcon }} category-icon"></i> 
+          <select [(ngModel)]="expense.category" (change)="updateCategoryIcon()" class="selector category">
+            <option *ngFor="let category of categories">{{ category }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="expense-amount-container">
+      <div class="amount">
+        <div>
+          <span class="currency">{{currencySymbol}}</span>
+          <input type="text" readonly [value]="formatAmount()" />
+        </div>
+      </div>
+
+      <textarea 
+      class="comment-placeholder" 
+      [(ngModel)]="expense.notes" 
+      placeholder="Add Notes..."
+      ></textarea>
+    </div>
+
+    <div class="num-pad">
+      <button class="num-btn" (click)="addDigit('1')">1</button>
+      <button class="num-btn" (click)="addDigit('2')">2</button>
+      <button class="num-btn" (click)="addDigit('3')">3</button>
+      <button class="delete-btn" (click)="addDigit('⌫')">
+        <i class="fas fa-backspace"></i>
+      </button>
+    
+      <button class="num-btn" (click)="addDigit('4')">4</button>
+      <button class="num-btn" (click)="addDigit('5')">5</button>
+      <button class="num-btn" (click)="addDigit('6')">6</button>
+      <div class="date-picker-container">
+        <button class="date-btn" (click)="openDatePicker()">
+          <i class="fas fa-calendar-alt"></i>
+        </button>
+        <input #dateInput type="date" (change)="updateDate($event)" class="hidden-date-input"/>
+      </div>
+    
+      <button class="num-btn" (click)="addDigit('7')">7</button>
+      <button class="num-btn" (click)="addDigit('8')">8</button>
+      <button class="num-btn" (click)="addDigit('9')">9</button>
+      <button class="submit-btn tall" (click)="addExpense()" [disabled]="!isFormValid()">
+        <i class="fas fa-check"></i>
+      </button>
+    
+      <button class="num-btn wide" (click)="addDigit('$')">$</button>
+      <button class="num-btn" (click)="addDigit('0')">0</button>
+      <button class="num-btn" (click)="addDigit('.')">,</button>
+    </div>
+  </div>
+</div>

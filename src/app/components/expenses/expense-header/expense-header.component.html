@@ -1,0 +1,18 @@
+<div class="top-bar">
+    <div class="balance-info">
+      <h2>{{ currencySymbol() }}{{ totalSpent().toFixed(2) }}</h2>
+      
+      <div class="dropdown">
+        <button class="dropdown-btn" (click)="toggleDropdown()">
+          Total Spent ({{ selectedFilter() === 'all' ? 'All Time' : 'This Year' }}) 
+          <i class="fas fa-chevron-down" [class.rotate]="isDropdownOpen()"></i>
+        </button>
+        
+        <ul class="dropdown-menu" *ngIf="isDropdownOpen()">
+          <li (click)="selectFilter('all')">All Time</li>
+          <li (click)="selectFilter('year')">This Year</li>
+        </ul>
+      </div>
+    </div>
+</div>
+  

@@ -1,0 +1,41 @@
+.expenses-page {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 90px;
+  background-color: var(--light-bg);
+  min-height: 100vh;
+  overflow-y: auto; 
+
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .tab-selector {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+    
+    button {
+      flex: 1;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      background: var(--light-bg);
+      transition: background 0.3s ease;
+
+      &.active {
+        background: var(--dark);
+        color: var(--light-bg);
+      }
+    }
+  }
+}

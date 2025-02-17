@@ -1,4 +1,5 @@
-<navbar *ngIf="showNavbar()"></navbar> <!-- Navbar only appears when logged in -->
+<navbar *ngIf="showNavbar()"></navbar> 
+<app-add-expense-modal *ngIf="globalService.isExpenseModalOpen()"></app-add-expense-modal>
 <div class="container">
   <router-outlet></router-outlet>
 </div>
