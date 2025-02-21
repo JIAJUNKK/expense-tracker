@@ -5,11 +5,11 @@
         <i [class]="expense.icon"></i>
       </div>
       <div class="expense-info">
-        <p class="expense-category">{{ expense.category }}</p>
         <p class="expense-type">{{ expense.item }}</p>
+        <p class="expense-category">{{ expense.category }}</p>
       </div>
       <div class="expense-amount">
-        <p class="amount-value">{{currencySymbol()}}{{ expense.amount.toFixed(2) }}</p>
+        <p class="amount-value">{{getCurrencySymbol(expense.currency)}}{{ expense.amount.toFixed(2) }}</p>
       </div>
     </div>
   </li>

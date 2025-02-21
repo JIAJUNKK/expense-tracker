@@ -1,4 +1,4 @@
-import { Component, inject, HostListener } from '@angular/core';
+import { Component, inject, HostListener, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Timestamp } from 'firebase/firestore';
@@ -6,6 +6,7 @@ import { Expense } from '../../../utils/app.model';
 
 import { ExpenseHelper } from '../../../services/firebase/Firestore/expense.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
+import { CurrencyService } from '../../../services/currency.service';
 import { GlobalService } from '../../../services/shared/global.service';
 
 @Component({
@@ -18,12 +19,16 @@ import { GlobalService } from '../../../services/shared/global.service';
 export class AddExpenseModalComponent {
   private expenseService = inject(ExpenseService);
   private globalService = inject(GlobalService);
+  private currencyService = inject(CurrencyService);
   public modalService = inject(GlobalService);
   private touchStartY = 0;
   private currentTranslateY = 0;
   public modalStyle = {};
 
-  currencySymbol = this.globalService.userCurrency().symbol;
+  currencySymbol = signal<string>(this.globalService.userCurrency().symbol);
+  currenciesList = this.currencyService.getCurrencies();
+  isCurrencyDropdownOpen = signal<boolean>(false);
+
   selectedDateText: string = "Select Date";
   categories = this.globalService.userCategories();
   selectedCategoryIcon: string = ExpenseHelper.getExpenseIcon(this.categories[0]);
@@ -35,6 +40,7 @@ export class AddExpenseModalComponent {
     amount: 0,
     date: Timestamp.fromDate(new Date()),
     notes: '', 
+    currency: this.globalService.userCurrency().abbreviation,
   };
 
   onTouchStart(event: TouchEvent) {
@@ -61,6 +67,16 @@ export class AddExpenseModalComponent {
     return this.expense.amount.toFixed(2); // Ensures two decimal places
   }
 
+  toggleCurrencyDropdown() {
+    this.isCurrencyDropdownOpen.set(!this.isCurrencyDropdownOpen());
+  }
+
+  selectCurrency(symbol: string, abbreviation: string) {
+    this.currencySymbol.set(symbol); 
+    this.expense.currency = abbreviation;
+    this.isCurrencyDropdownOpen.set(false); 
+  }
+
   @HostListener('window:keydown', ['$event'])
   handleKeyboardInput(event: KeyboardEvent) {
     const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'Backspace'];
@@ -76,6 +92,22 @@ export class AddExpenseModalComponent {
     }
   
     this.expense.amount = parseFloat(amountStr) / 100;
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: Event) {
+    const dropdown = document.querySelector('.currency-dropdown');
+    const button = document.querySelector('.wide');
+
+    if (
+      this.isCurrencyDropdownOpen() &&
+      dropdown &&
+      !dropdown.contains(event.target as Node) &&
+      button &&
+      !button.contains(event.target as Node)
+    ) {
+      this.isCurrencyDropdownOpen.set(false);
+    }
   }
 
   addDigit(digit: string) {

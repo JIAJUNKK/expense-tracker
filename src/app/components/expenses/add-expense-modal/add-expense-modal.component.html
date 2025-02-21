@@ -24,7 +24,7 @@
     <div class="expense-amount-container">
       <div class="amount">
         <div>
-          <span class="currency">{{currencySymbol}}</span>
+          <span class="currency">{{currencySymbol()}}</span>
           <input type="text" readonly [value]="formatAmount()" />
         </div>
       </div>
@@ -61,9 +61,28 @@
         <i class="fas fa-check"></i>
       </button>
     
-      <button class="num-btn wide" (click)="addDigit('$')">$</button>
+      <button class="num-btn wide" (click)="toggleCurrencyDropdown()">
+        {{ currencySymbol() }} 
+        <i class="fas fa-chevron-down" [class.rotate]="isCurrencyDropdownOpen()"></i>
+      </button>
       <button class="num-btn" (click)="addDigit('0')">0</button>
-      <button class="num-btn" (click)="addDigit('.')">,</button>
     </div>
+
+    <div class="currency-dropdown" [class.show]="isCurrencyDropdownOpen()">
+      <div *ngFor="let currency of currenciesList" 
+           (click)="selectCurrency(currency.symbol, currency.abbreviation)" 
+           class="currency-option">
+        <span class="flag-icon">{{ currency.flag }}</span>
+        <div class="currency-text">
+          <span class="currency-code">{{ currency.abbreviation }}</span>
+          <span class="currency-name">{{ currency.symbol }}</span>
+        </div>
+      </div>
+    </div>
+    
+    
   </div>
+
+
+
 </div>

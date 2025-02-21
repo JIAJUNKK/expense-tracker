@@ -9,10 +9,12 @@ export interface Expense {
   notes?: string;
   color?: string;
   icon?: string;
+  currency: string;
 }
 
 export interface Currency {
   name: string;
   abbreviation: string;
   symbol: string;
+  flag: string;
 }
