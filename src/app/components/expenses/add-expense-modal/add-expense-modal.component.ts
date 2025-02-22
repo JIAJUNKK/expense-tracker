@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Timestamp } from 'firebase/firestore';
 import { Expense } from '../../../utils/app.model';
 
-import { ExpenseHelper } from '../../../services/firebase/Firestore/expense.service';
+import { CategoryUtils } from '../../../utils/categories';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
 import { CurrencyService } from '../../../services/currency.service';
 import { GlobalService } from '../../../services/shared/global.service';
@@ -31,7 +31,7 @@ export class AddExpenseModalComponent {
 
   selectedDateText: string = "Select Date";
   categories = this.globalService.userCategories();
-  selectedCategoryIcon: string = ExpenseHelper.getExpenseIcon(this.categories[0]);
+  selectedCategoryIcon: string = CategoryUtils.getExpenseIcon(this.categories[0]);
   today = new Date().toISOString().split('T')[0];
 
   expense: Expense = {
@@ -180,7 +180,7 @@ export class AddExpenseModalComponent {
   }
 
   updateCategoryIcon() {
-    this.selectedCategoryIcon = ExpenseHelper.getExpenseIcon(this.expense.category);
+    this.selectedCategoryIcon = CategoryUtils.getExpenseIcon(this.expense.category);
   }
 
   async addExpense() {

@@ -3,7 +3,7 @@ import Chart from 'chart.js/auto';
 import { GlobalService } from '../../../services/shared/global.service';
 import { CurrencyConversionService } from '../../../services/shared/currenyConversion.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
-import { ExpenseHelper } from '../../../services/firebase/Firestore/expense.service';
+import { CategoryUtils } from '../../../utils/categories';
 import { Expense } from '../../../utils/app.model';
 
 @Component({
@@ -50,7 +50,7 @@ export class ExpenseChartComponent implements AfterViewInit {
           {
             label: `Total Spendings (${currencySymbol})`,
             data: categoryTotals.map(ct => ct.total), // ✅ X-Axis: Spendings
-            backgroundColor: categoryTotals.map(ct => ExpenseHelper.getExpenseColor(ct.category)),
+            backgroundColor: categoryTotals.map(ct => CategoryUtils.getExpenseColor(ct.category)),
             categoryPercentage: 0.8, 
             borderRadius: 5,
             barThickness: 20,
