@@ -1,6 +1,9 @@
 <ul class="expense-list">
-  <li *ngFor="let expense of expenses()">
-    <div class="expense-item">
+  <li *ngFor="let group of groupedExpenses()">
+    <div class="expense-date">{{ group.date }}</div>
+    <hr class="divider" />
+
+    <div *ngFor="let expense of group.items" class="expense-item">
       <div class="expense-icon" [style.background]="expense.color">
         <i [class]="expense.icon"></i>
       </div>

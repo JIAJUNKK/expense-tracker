@@ -5,6 +5,7 @@ import { CurrencyConversionService } from '../../../services/shared/currenyConve
 import { CurrencyService } from '../../../services/currency.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
 import { Expense } from '../../../utils/app.model';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-expense-list',
@@ -22,6 +23,7 @@ export class ExpenseListComponent implements OnInit {
 
   @Input() filter!: WritableSignal<string>;
   expenses = signal<Expense[]>([]);
+  groupedExpenses = computed(() => this.groupExpensesByDate(this.expenses()));
   currencySymbol = computed(() => this.globalService.userCurrency().symbol);
   baseCurrency = computed(() => this.globalService.userCurrency().abbreviation);
 
@@ -40,6 +42,23 @@ export class ExpenseListComponent implements OnInit {
     await this.currencyConversionService.fetchExchangeRates(this.baseCurrency());
     const fetchedExpenses = await this.expenseService.fetchExpenses(this.filter());
     this.expenses.set(fetchedExpenses);
+  }
+
+  groupExpensesByDate(expenses: Expense[]): { date: string; items: Expense[] }[] {
+    const grouped: { [key: string]: Expense[] } = {};
+
+    expenses.forEach(expense => {
+      const date = (expense.date as Timestamp).toDate().toDateString(); // Format date
+      if (!grouped[date]) {
+        grouped[date] = [];
+      }
+      grouped[date].push(expense);
+    });
+
+    return Object.keys(grouped).map(date => ({
+      date,
+      items: grouped[date]
+    }));
   }
 
   getConvertedAmount(expense: Expense): string {
