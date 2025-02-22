@@ -2,6 +2,7 @@ import { Component, inject, signal, OnInit, computed, effect, Input, WritableSig
 import { CommonModule } from '@angular/common';
 import { Expense } from '../../../utils/app.model';
 import { GlobalService } from '../../../services/shared/global.service';
+import { CurrencyConversionService } from '../../../services/shared/currenyConversion.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
 import { Timestamp } from 'firebase/firestore';
 
@@ -16,10 +17,12 @@ export class ExpenseSummaryComponent implements OnInit {
   private injector = inject(Injector);
   private expenseService = inject(ExpenseService);
   private globalService = inject(GlobalService);
+  private currencyConversionService = inject(CurrencyConversionService);
 
-  @Input() filter!: WritableSignal<string>; // ✅ Accepts the selected filter
+  @Input() filter!: WritableSignal<string>; 
 
   currencySymbol = computed(() => this.globalService.userCurrency().symbol);
+  baseCurrency = computed(() => this.globalService.userCurrency().abbreviation);
 
   totalDay = signal('0.00'); 
   totalWeek = signal('0.00');
@@ -53,17 +56,26 @@ export class ExpenseSummaryComponent implements OnInit {
     console.log(`Fetching expenses for: ${monthYear}`);
 
     // Calculate total monthly spend
-    const totalMonthValue = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+    const convertedExpenses = expenses.map(expense => ({
+      ...expense,
+      amount: this.currencyConversionService.convertAmount(expense.amount, expense.currency)
+    }));
+
+    const totalMonthValue = convertedExpenses.reduce((sum, exp) => sum + exp.amount, 0);
     this.totalMonth.set(totalMonthValue.toFixed(2));
 
     // Fetch total yearly spend
     const yearlyExpenses = await this.expenseService.fetchExpenses(undefined, year);
-    const totalYearValue = yearlyExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+    const convertedYearlyExpenses = yearlyExpenses.map(exp => ({
+      ...exp,
+      amount: this.currencyConversionService.convertAmount(exp.amount, exp.currency)
+    }));
+    const totalYearValue = convertedYearlyExpenses.reduce((sum, exp) => sum + exp.amount, 0);
     this.totalYear.set(totalYearValue.toFixed(2));
 
     // Calculate daily and weekly spend
-    this.calculateDailySpend(expenses);
-    this.calculateWeeklySpend(expenses);
+    this.calculateDailySpend(convertedExpenses);
+    this.calculateWeeklySpend(convertedExpenses);
   }
 
   calculateDailySpend(expenses: Expense[]) {

@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, Input, WritableSignal, inject, effect, runInInjectionContext, Injector} from '@angular/core';
 import Chart from 'chart.js/auto';
 import { GlobalService } from '../../../services/shared/global.service';
+import { CurrencyConversionService } from '../../../services/shared/currenyConversion.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
 import { ExpenseHelper } from '../../../services/firebase/Firestore/expense.service';
 import { Expense } from '../../../utils/app.model';
@@ -15,6 +16,7 @@ export class ExpenseChartComponent implements AfterViewInit {
   private injector = inject(Injector);
   private expenseService = inject(ExpenseService);
   private globalService = inject(GlobalService);
+  private currencyConversionService = inject(CurrencyConversionService);
   private chart: Chart | null = null;
   @Input() filter!: WritableSignal<string>; 
 
@@ -29,7 +31,13 @@ export class ExpenseChartComponent implements AfterViewInit {
     const ctx = document.getElementById('expenseChart') as HTMLCanvasElement;
 
     const expenses = await this.expenseService.fetchExpenses(this.filter());
-    const categoryTotals = this.calculateCategoryTotals(expenses);
+
+    const convertedExpenses = expenses.map(expense => ({
+      ...expense,
+      amount: this.currencyConversionService.convertAmount(expense.amount, expense.currency)
+    }));
+
+    const categoryTotals = this.calculateCategoryTotals(convertedExpenses);
     const currencySymbol = this.globalService.userCurrency().symbol;
 
     if (this.chart) this.chart.destroy();
@@ -76,6 +84,14 @@ export class ExpenseChartComponent implements AfterViewInit {
         plugins: {
           legend: {
             display: true
+          }, 
+          tooltip: {
+            callbacks: {
+              label: (tooltipItem) => {
+                const value = tooltipItem.raw as number; 
+                return `${currencySymbol} ${value.toFixed(2)}`; 
+              }
+            }
           }
         },
         layout: {

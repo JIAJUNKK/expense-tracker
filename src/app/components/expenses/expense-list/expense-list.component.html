@@ -9,7 +9,13 @@
         <p class="expense-category">{{ expense.category }}</p>
       </div>
       <div class="expense-amount">
-        <p class="amount-value">{{getCurrencySymbol(expense.currency)}}{{ expense.amount.toFixed(2) }}</p>
+        <p class="original-amount">
+          <span>{{ getCurrencySymbol(expense.currency) }}</span>
+          {{ expense.amount.toFixed(2) }}
+        </p>
+        <p class="converted-amount">
+          ≈ {{ getConvertedAmount(expense) }}
+        </p>
       </div>
     </div>
   </li>

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, WritableSignal, inject, signal, computed, effect, runInInjectionContext, Injector} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GlobalService } from '../../../services/shared/global.service';
+import { CurrencyConversionService } from '../../../services/shared/currenyConversion.service';
 import { CurrencyService } from '../../../services/currency.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
 import { Expense } from '../../../utils/app.model';
@@ -17,10 +18,12 @@ export class ExpenseListComponent implements OnInit {
   private expenseService = inject(ExpenseService);
   private currencyService = inject(CurrencyService);
   private globalService = inject(GlobalService);
+  private currencyConversionService = inject(CurrencyConversionService);
 
   @Input() filter!: WritableSignal<string>;
   expenses = signal<Expense[]>([]);
   currencySymbol = computed(() => this.globalService.userCurrency().symbol);
+  baseCurrency = this.globalService.userCurrency().abbreviation;
 
 
   constructor() {
@@ -32,8 +35,14 @@ export class ExpenseListComponent implements OnInit {
   }
 
   async fetchExpenses() {
+    await this.currencyConversionService.fetchExchangeRates(this.baseCurrency);
     const fetchedExpenses = await this.expenseService.fetchExpenses(this.filter());
     this.expenses.set(fetchedExpenses);
+  }
+
+  getConvertedAmount(expense: Expense): string {
+    const convertedAmount = this.currencyConversionService.convertAmount(expense.amount, expense.currency);
+    return `${this.currencySymbol()}${convertedAmount.toFixed(2)}`;
   }
 
   getCurrencySymbol(currencyAbbr: string): string {
@@ -43,7 +52,7 @@ export class ExpenseListComponent implements OnInit {
   getCurrencyFlag(currencyAbbr: string): string {
     return this.currencyService.getCurrencyFlag(currencyAbbr);
   }
-  
+
   ngOnInit() {
     this.fetchExpenses();
   }
