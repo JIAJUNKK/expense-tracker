@@ -15,10 +15,12 @@
       padding: 15px 20px;
   
       h2 {
+        flex: 2;
         font-size: 24px;
         color: var(--dark);
       }
       .dropdown {
+        flex: 1;
         position: relative;
         display: inline-block;
   
@@ -32,6 +34,8 @@
           border: none;
           background: transparent;
           font-weight: bold;
+          padding: 0;
+          text-align: left;
         }
   
         .dropdown-menu {

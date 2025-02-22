@@ -44,7 +44,11 @@ export class ExpenseHeaderComponent {
     } else {
       const year = new Date().getFullYear().toString();
       const expenses = await this.expenseService.fetchExpenses(undefined, year);
-      const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+      const convertedExpenses = expenses.map(expense => ({
+        ...expense,
+        amount: this.currencyConversionService.convertAmount(expense.amount, expense.currency)
+      }));
+      const total = convertedExpenses.reduce((sum, exp) => sum + exp.amount, 0);
       this.totalSpent.set(total);
     }
   }
