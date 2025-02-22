@@ -4,17 +4,19 @@
       <div class="expense-icon" [style.background]="expense.color">
         <i [class]="expense.icon"></i>
       </div>
+
       <div class="expense-info">
         <p class="expense-type">{{ expense.item }}</p>
         <p class="expense-category">{{ expense.category }}</p>
       </div>
+      
       <div class="expense-amount">
         <p class="original-amount">
           <span>{{ getCurrencySymbol(expense.currency) }}</span>
           {{ expense.amount.toFixed(2) }}
         </p>
         <p class="converted-amount">
-          ≈ {{ getConvertedAmount(expense) }}
+          {{ getConvertedAmount(expense) }}
         </p>
       </div>
     </div>

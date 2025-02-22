@@ -23,24 +23,29 @@ export class ExpenseListComponent implements OnInit {
   @Input() filter!: WritableSignal<string>;
   expenses = signal<Expense[]>([]);
   currencySymbol = computed(() => this.globalService.userCurrency().symbol);
-  baseCurrency = this.globalService.userCurrency().abbreviation;
+  baseCurrency = computed(() => this.globalService.userCurrency().abbreviation);
 
 
   constructor() {
     runInInjectionContext(this.injector, () => {
       effect(() => {
-        this.fetchExpenses(); 
+        if (this.filter()) {
+          this.fetchExpenses();
+        }
       });
     });
   }
 
   async fetchExpenses() {
-    await this.currencyConversionService.fetchExchangeRates(this.baseCurrency);
+    await this.currencyConversionService.fetchExchangeRates(this.baseCurrency());
     const fetchedExpenses = await this.expenseService.fetchExpenses(this.filter());
     this.expenses.set(fetchedExpenses);
   }
 
   getConvertedAmount(expense: Expense): string {
+    if (expense.currency === this.baseCurrency()) {
+      return ''; 
+    }
     const convertedAmount = this.currencyConversionService.convertAmount(expense.amount, expense.currency);
     return `${this.currencySymbol()}${convertedAmount.toFixed(2)}`;
   }

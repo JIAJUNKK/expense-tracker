@@ -19,7 +19,7 @@
       }
   
       .expense-item {
-        display: flex;
+        display: flex; flex-direction: row;
         align-items: center;
         width: 100%;
         justify-content: space-between;
@@ -38,7 +38,7 @@
   
       .expense-info {
         flex-grow: 1;
-        margin-left: 14px;
+        margin-left: 20px;
   
         .expense-type {
           font-weight: bold;
@@ -56,12 +56,18 @@
   
       .expense-amount {
         text-align: right;
-        
-        .amount-value {
+        .original-amount {
+          text-align: right;
           font-weight: bold;
           font-size: 18px;
           color: var(--dark);
           margin: 0;
+        }
+        .converted-amount{
+          text-align: right;
+          font-size: 14px;
+          color: var(--secondary-dark);
+          margin: 5px 0;
         }
       }
     }
