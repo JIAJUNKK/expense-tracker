@@ -3,7 +3,7 @@ import Chart from 'chart.js/auto';
 import { GlobalService } from '../../../services/shared/global.service';
 import { CurrencyConversionService } from '../../../services/shared/currenyConversion.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
-import { CategoryUtils } from '../../../utils/categories';
+import { CategoryUtils } from '../../../utils/categories.utils';
 import { Expense } from '../../../utils/app.model';
 
 @Component({

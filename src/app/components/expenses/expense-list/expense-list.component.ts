@@ -6,11 +6,12 @@ import { CurrencyService } from '../../../services/currency.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
 import { Expense } from '../../../utils/app.model';
 import { Timestamp } from 'firebase/firestore';
+import { ExpenseItemEditComponent } from '../expense-item-edit/expense-item-edit.component';
 
 @Component({
   selector: 'app-expense-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ExpenseItemEditComponent],
   templateUrl: './expense-list.component.html',
   styleUrls: ['./expense-list.component.scss']
 })
@@ -27,6 +28,8 @@ export class ExpenseListComponent implements OnInit {
   currencySymbol = computed(() => this.globalService.userCurrency().symbol);
   baseCurrency = computed(() => this.globalService.userCurrency().abbreviation);
 
+  isEditModalOpen = signal(false);
+  selectedExpense = signal<Expense | null>(null);
 
   constructor() {
     runInInjectionContext(this.injector, () => {
@@ -41,7 +44,26 @@ export class ExpenseListComponent implements OnInit {
   async fetchExpenses() {
     await this.currencyConversionService.fetchExchangeRates(this.baseCurrency());
     const fetchedExpenses = await this.expenseService.fetchExpenses(this.filter());
-    this.expenses.set(fetchedExpenses);
+    this.expenses.set(fetchedExpenses.map(exp => ({ ...exp, id: exp.id })));
+  }
+
+  openEditModal(expense: Expense) {
+    const filteredExpense = {
+      amount: expense.amount,
+      category: expense.category,
+      currency: expense.currency,
+      date: expense.date,
+      item: expense.item,
+      notes: expense.notes, 
+      id: expense.id,
+    };
+    this.selectedExpense.set(filteredExpense as Expense);
+    this.isEditModalOpen.set(true);
+  }
+
+  closeEditModal() {
+    this.isEditModalOpen.set(false);
+    this.selectedExpense.set(null);
   }
 
   groupExpensesByDate(expenses: Expense[]): { date: string; items: Expense[] }[] {
@@ -75,6 +97,12 @@ export class ExpenseListComponent implements OnInit {
 
   getCurrencyFlag(currencyAbbr: string): string {
     return this.currencyService.getCurrencyFlag(currencyAbbr);
+  }
+
+  updateExpense(updatedExpense: Expense) {
+    const updatedExpenses = this.expenses().map(exp => exp.id === updatedExpense.id ? updatedExpense : exp);
+    this.expenses.set(updatedExpenses);
+    this.closeEditModal();
   }
 
   ngOnInit() {

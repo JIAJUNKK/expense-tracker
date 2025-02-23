@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Timestamp } from 'firebase/firestore';
 import { Expense } from '../../../utils/app.model';
 
-import { CategoryUtils } from '../../../utils/categories';
+import { CategoryUtils } from '../../../utils/categories.utils';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
 import { CurrencyService } from '../../../services/currency.service';
 import { GlobalService } from '../../../services/shared/global.service';

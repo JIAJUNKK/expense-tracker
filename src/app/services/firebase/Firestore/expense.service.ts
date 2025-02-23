@@ -2,7 +2,7 @@ import { Injectable, inject, Injector, runInInjectionContext } from '@angular/co
 import { Firestore, collection, getDocs, getDoc, doc, query, setDoc, addDoc, Timestamp} from '@angular/fire/firestore';
 import { AuthProvider } from '../../../context/auth-provider';
 import { Expense } from '../../../utils/app.model';
-import { CategoryUtils } from '../../../utils/categories';
+import { CategoryUtils } from '../../../utils/categories.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -204,5 +204,19 @@ export class ExpenseService {
     });
   }
   
+  async updateExpense(expense: Expense): Promise<void> {
+    if (!this.authProvider.user() || !expense.id) return;
+  
+    const userId = this.authProvider.user()?.uid;
+    const date = (expense.date as Timestamp).toDate();
+    const year = date.getFullYear().toString();
+    const monthYear = `${date.toLocaleString('default', { month: 'short' })}_${year}`;
+  
+    return runInInjectionContext(this.injector, async () => {
+      const { id, ...expenseData } = expense;
+      const expenseRef = doc(this.firestore, `expenses/${userId}/meta/${year}/${monthYear}/${expense.id}`);
+      await setDoc(expenseRef, expenseData, { merge: true });
+    });
+  }
 }
 

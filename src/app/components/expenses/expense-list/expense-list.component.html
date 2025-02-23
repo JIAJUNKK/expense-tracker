@@ -22,6 +22,14 @@
           {{ getConvertedAmount(expense) }}
         </p>
       </div>
+      <button class="edit-btn" (click)="openEditModal(expense)">Edit</button>
     </div>
   </li>
 </ul>
+
+<app-expense-item-edit 
+  *ngIf="isEditModalOpen() && selectedExpense()" 
+  [expense]="selectedExpense()!" 
+  (closeModal)="closeEditModal()" 
+  (expenseUpdated)="updateExpense($event)">
+</app-expense-item-edit>
