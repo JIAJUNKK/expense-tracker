@@ -7,23 +7,20 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthProvider {
-  user = signal<User | null>(null); // Global state for the user
-  isSettingUser = signal(true); // ✅ Prevents unnecessary redirects before session check is done
+  user = signal<User | null>(null);
+  isSettingUser = signal(true); 
 
   constructor(private authService: AuthService, private router: Router) {
     // Restore the user session when the app loads
     this.authService.onAuthStateChanged((authUser) => {
       if (authUser) {
-        console.log("authUser: ", authUser);
         this.user.set(authUser);
       } else {
-        console.log("No user");
         this.user.set(null);
       }
       this.isSettingUser.set(false);
     });
 
-    // 🔥 Check if user is already logged in
     const currentUser = this.authService.user();
     if (currentUser) {
       this.user.set(currentUser);

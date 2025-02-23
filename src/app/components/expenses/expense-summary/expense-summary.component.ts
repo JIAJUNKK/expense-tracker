@@ -40,6 +40,12 @@ export class ExpenseSummaryComponent implements OnInit {
       effect(() => {
         this.fetchExpenseSummary(); 
       });
+
+      this.expenseService.expenseUpdateNotifier.subscribe(() => {
+        console.log("Expense updated, re-fetching summary...");
+        this.fetchExpenseSummary();
+      });
+      
     });
   }
 
@@ -53,8 +59,6 @@ export class ExpenseSummaryComponent implements OnInit {
 
     const expenses = await this.expenseService.fetchExpenses(monthYear, year);
     
-    console.log(`Fetching expenses for: ${monthYear}`);
-
     // Calculate total monthly spend
     const convertedExpenses = expenses.map(expense => ({
       ...expense,

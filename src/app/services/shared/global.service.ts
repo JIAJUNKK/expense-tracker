@@ -48,7 +48,6 @@ export class GlobalService {
   async fetchUserCategories(userId: string) {
     if (!userId) return;
     const categories = await this.userService.getUserCategories(userId);
-    console.log(categories)
     this.userCategories.set(categories); 
   }
 }

@@ -1,8 +1,10 @@
-import { Injectable, inject, Injector, runInInjectionContext } from '@angular/core';
-import { Firestore, collection, getDocs, getDoc, doc, query, setDoc, addDoc, Timestamp} from '@angular/fire/firestore';
+import { Injectable, inject, Injector, runInInjectionContext, signal } from '@angular/core';
+import { Subject } from 'rxjs';
+import { Firestore, collection, getDocs, getDoc, doc, setDoc, addDoc, Timestamp} from '@angular/fire/firestore';
 import { AuthProvider } from '../../../context/auth-provider';
 import { Expense } from '../../../utils/app.model';
 import { CategoryUtils } from '../../../utils/categories.utils';
+import { deleteDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +13,16 @@ export class ExpenseService {
   private injector = inject(Injector); 
   private firestore = inject(Firestore);
   private authProvider = inject(AuthProvider);
+
+  private _expenses = signal<Expense[]>([]);
+  private _selectedMonthYear = signal<string | undefined>(ExpenseService.getCurrentMonthYear());
+  private _selectedYear = signal<string | undefined>(ExpenseService.getCurrentYear());
+
+  private expenseUpdated$ = new Subject<void>();
+
+  get expenseUpdateNotifier() {
+    return this.expenseUpdated$.asObservable();
+  }
 
   async fetchExpenses(selectedMonthYear?: string, selectedYear?: string): Promise<Expense[]> {
     if (!this.authProvider.user()) return [];
@@ -46,9 +58,7 @@ export class ExpenseService {
       }
   
       // Fetching all expenses for a specific year
-      if (selectedYear) {
-        console.log(`Fetching all expenses for ${selectedYear}`);
-  
+      if (selectedYear) {  
         const yearMetaRef = doc(this.firestore, `expenses/${userId}/meta/${selectedYear}`);
         const yearMetaSnap = await getDoc(yearMetaRef);
   
@@ -78,7 +88,7 @@ export class ExpenseService {
         }
         return allExpenses;
       }
-  
+      this._expenses.set(allExpenses);
       return allExpenses;
     });
   }
@@ -204,19 +214,41 @@ export class ExpenseService {
     });
   }
   
-  async updateExpense(expense: Expense): Promise<void> {
-    if (!this.authProvider.user() || !expense.id) return;
+  async updateExpense(originalExpense: Expense, updatedExpense: Expense): Promise<void> {
+    if (!this.authProvider.user() || !originalExpense.id || !updatedExpense.date) return;
   
     const userId = this.authProvider.user()?.uid;
-    const date = (expense.date as Timestamp).toDate();
-    const year = date.getFullYear().toString();
-    const monthYear = `${date.toLocaleString('default', { month: 'short' })}_${year}`;
+    const originalDate = (originalExpense.date as Timestamp).toDate();
+    const originalYear = originalDate.getFullYear().toString();
+    const originalMonthYear = ExpenseService.getMonthYear(originalExpense.date);
   
-    return runInInjectionContext(this.injector, async () => {
-      const { id, ...expenseData } = expense;
-      const expenseRef = doc(this.firestore, `expenses/${userId}/meta/${year}/${monthYear}/${expense.id}`);
-      await setDoc(expenseRef, expenseData, { merge: true });
-    });
+    const newDate = (updatedExpense.date as Timestamp).toDate();
+    const newYear = newDate.getFullYear().toString();
+    const newMonthYear = ExpenseService.getMonthYear(updatedExpense.date);
+  
+    if (originalMonthYear !== newMonthYear || originalYear !== newYear) {      
+      const oldExpenseRef = doc(this.firestore, `expenses/${userId}/meta/${originalYear}/${originalMonthYear}/${originalExpense.id}`);
+      await deleteDoc(oldExpenseRef);
+    }  
+    const newExpenseRef = doc(this.firestore, `expenses/${userId}/meta/${newYear}/${newMonthYear}/${updatedExpense.id}`);
+    await setDoc(newExpenseRef, updatedExpense, { merge: true });  
+    this.expenseUpdated$.next();
+  }
+  
+  
+  private static getMonthYear(timestamp: Timestamp | null): string {
+    if (!timestamp) return "Undefined";
+    const date = timestamp.toDate();
+    return `${date.toLocaleString('default', { month: 'short' })}_${date.getFullYear()}`;
+  }
+  
+  private static getCurrentMonthYear(): string {
+    const now = new Date();
+    return `${now.toLocaleString('default', { month: 'short' })}_${now.getFullYear()}`;
+  }
+
+  private static getCurrentYear(): string {
+    return new Date().getFullYear().toString();
   }
 }
 

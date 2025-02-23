@@ -5,6 +5,7 @@ import { CurrencyConversionService } from '../../../services/shared/currenyConve
 import { CurrencyService } from '../../../services/currency.service';
 import { ExpenseService } from '../../../services/firebase/Firestore/expense.service';
 import { Expense } from '../../../utils/app.model';
+import { CategoryUtils } from '../../../utils/categories.utils';
 import { Timestamp } from 'firebase/firestore';
 import { ExpenseItemEditComponent } from '../expense-item-edit/expense-item-edit.component';
 
@@ -37,6 +38,10 @@ export class ExpenseListComponent implements OnInit {
         if (this.filter()) {
           this.fetchExpenses();
         }
+      });
+      this.expenseService.expenseUpdateNotifier.subscribe(() => {
+        console.log("Expense updated, re-fetching expesnes...");
+        this.fetchExpenses();
       });
     });
   }
@@ -100,8 +105,21 @@ export class ExpenseListComponent implements OnInit {
   }
 
   updateExpense(updatedExpense: Expense) {
-    const updatedExpenses = this.expenses().map(exp => exp.id === updatedExpense.id ? updatedExpense : exp);
+    const originalExpense = this.expenses().find(exp => exp.id === updatedExpense.id);
+    if (!originalExpense) return;
+
+    const enrichedExpense = {
+      ...updatedExpense,
+      color: CategoryUtils.getExpenseColor(updatedExpense.category),
+      icon: CategoryUtils.getExpenseIcon(updatedExpense.category),
+    };
+  
+    const updatedExpenses = this.expenses().map(exp => 
+      exp.id === updatedExpense.id ? enrichedExpense : exp
+    );
+  
     this.expenses.set(updatedExpenses);
+    this.expenseService.updateExpense(originalExpense, updatedExpense);
     this.closeEditModal();
   }
 

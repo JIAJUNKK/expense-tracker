@@ -28,6 +28,10 @@ export class ExpenseHeaderComponent {
     effect(() => {
       this.fetchTotalSpent(); 
     });
+    this.expenseService.expenseUpdateNotifier.subscribe(() => {
+      console.log("Expense updated, re-fetching total spent...");
+      this.fetchTotalSpent();
+    });
   }
 
   async fetchTotalSpent() {

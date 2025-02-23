@@ -25,6 +25,10 @@ export class ExpenseChartComponent implements AfterViewInit {
       effect(() => {
         this.updateChart(); 
       });
+      this.expenseService.expenseUpdateNotifier.subscribe(() => {
+        console.log("Expense updated, refreshing chart...");
+        this.updateChart();
+      });
     });
   }
   async updateChart() {

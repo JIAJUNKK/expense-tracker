@@ -27,13 +27,15 @@ export class ExpenseItemEditComponent {
   editedDate = signal<string>('');
 
   saveChanges() {
+    const originalExpense = this.expense;
     const updatedExpense: Expense = {
       ...this.editedExpense(),
       date: DateUtils.convertDateToTimestamp(this.editedDate()),
     };
-    this.expenseService.updateExpense(updatedExpense);
-    this.expenseUpdated.emit(updatedExpense);
-    this.closeModal.emit();
+    this.expenseService.updateExpense(originalExpense, updatedExpense).then(() => {
+      this.expenseUpdated.emit(updatedExpense);
+      this.closeModal.emit();
+    });
   }
 
   ngOnInit() {
