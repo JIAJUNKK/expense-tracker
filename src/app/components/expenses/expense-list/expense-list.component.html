@@ -3,7 +3,7 @@
     <div class="expense-date">{{ group.date }}</div>
     <hr class="divider" />
 
-    <div *ngFor="let expense of group.items" class="expense-item">
+    <div *ngFor="let expense of group.items" class="expense-item" (click)="openEditModal(expense)">
       <div class="expense-icon" [style.background]="expense.color">
         <i [class]="expense.icon"></i>
       </div>
@@ -22,7 +22,6 @@
           {{ getConvertedAmount(expense) }}
         </p>
       </div>
-      <button class="edit-btn" (click)="openEditModal(expense)">Edit</button>
     </div>
   </li>
 </ul>
