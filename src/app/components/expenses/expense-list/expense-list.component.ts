@@ -81,8 +81,14 @@ export class ExpenseListComponent implements OnInit {
       }
       grouped[date].push(expense);
     });
+    
+    Object.keys(grouped).forEach(date => {
+      grouped[date].sort((a, b) => (b.date as Timestamp).toMillis() - (a.date as Timestamp).toMillis());
+    });
 
-    return Object.keys(grouped).map(date => ({
+    return Object.keys(grouped)
+    .sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
+    .map(date => ({
       date,
       items: grouped[date]
     }));
