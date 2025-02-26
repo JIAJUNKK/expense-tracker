@@ -49,7 +49,7 @@
         <div class="detail-item-row">
           <label>Item</label>
           <div class="input-wrapper">
-            <p>{{ editedExpense().item }}</p>
+            <input type="text" [(ngModel)]="editedExpense().item" class="item-input" placeholder="Enter item name" />
           </div>
         </div>
       
