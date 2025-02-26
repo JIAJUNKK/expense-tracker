@@ -1,37 +1,66 @@
-<div class="modal-overlay">
-    <div class="modal">
-      <h2>Edit Expense</h2>
-      
-      <label>Item Name</label>
-      <input type="text" [(ngModel)]="editedExpense().item" />
-  
-      <label>Category</label>
-      <select [(ngModel)]="editedExpense().category">
-        <option *ngFor="let category of ['Transport', 'Groceries', 'Bill', 'Entertainment', 'Meal', 'Travel']">
-          {{ category }}
-        </option>
-      </select>
-  
-      <label>Amount</label>
-      <input type="number" [(ngModel)]="editedExpense().amount" />
-  
-      <label>Currency</label>
-      <select [(ngModel)]="editedExpense().currency">
-        <option *ngFor="let currency of currencyList" [value]="currency.abbreviation">
-          {{ currency.symbol }} - {{ currency.abbreviation }}
-        </option>
-      </select>
-  
-      <label>Date</label>
-      <input type="date" [(ngModel)]="editedDate" />
-  
-      <label>Notes</label>
-      <textarea [(ngModel)]="editedExpense().notes"></textarea>
-  
-      <div class="modal-actions">
-        <button class="cancel-btn" (click)="closeModal.emit()">Cancel</button>
-        <button class="save-btn" (click)="saveChanges()">Save</button>
+<div class="modal-overlay" [ngClass]="{ 'slide-out': isClosing() }">
+  <div class="modal">
+
+    <div class="modal-header">
+      <i class="fas fa-arrow-left back-icon" (click)="animateClose()"></i>
+    </div>
+
+    <div class="top-section">
+      <div class="category-selector">
+        <div class="category-dropdown">
+          <i [class]="CategoryUtils.getExpenseIcon(editedExpense().category)" class="category-icon"></i>
+          <select [(ngModel)]="editedExpense().category" class="category-select">
+            <option *ngFor="let category of userCategories()" [value]="category">
+              {{ category }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="amount-section">
+        <div class="currency-selector-wrapper">
+          <i class="fas fa-chevron-down currency-arrow"></i>
+          <select [(ngModel)]="editedExpense().currency" class="currency-selector">
+            <option *ngFor="let currency of currencyList" [value]="currency.abbreviation">
+              {{ currency.symbol }}
+            </option>
+          </select>
+        </div>
+        <input type="number" [(ngModel)]="editedExpense().amount" class="amount-input" />
+      </div>
+
+      <div class="expense-title">
+        {{ editedExpense().item }}
       </div>
     </div>
+
+    <div class="bottom-section">
+      <div class="transaction-details">    
+        <h2>Details</h2>
+        <div class="detail-item-row">
+          <label>When</label>
+          <div class="input-wrapper">
+            <input type="date" [(ngModel)]="editedDate" class="date-input" />
+          </div>
+        </div>
+      
+        <div class="detail-item-row">
+          <label>Item</label>
+          <div class="input-wrapper">
+            <p>{{ editedExpense().item }}</p>
+          </div>
+        </div>
+      
+        <div class="detail-item-row">
+          <label>Notes</label>
+          <div class="input-wrapper">
+            <textarea [(ngModel)]="editedExpense().notes" class="notes-input" placeholder="Add a note..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="save-btn" (click)="saveChanges()">Update Changes</button>
+      </div>
+    </div>
+  </div>
 </div>
-  
