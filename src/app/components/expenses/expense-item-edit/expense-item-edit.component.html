@@ -1,6 +1,5 @@
 <div class="modal-overlay" [ngClass]="{ 'slide-out': isClosing() }">
   <div class="modal">
-
     <div class="modal-header">
       <i class="fas fa-arrow-left back-icon" (click)="animateClose()"></i>
     </div>
@@ -18,15 +17,18 @@
       </div>
 
       <div class="amount-section">
-        <div class="currency-selector-wrapper">
-          <i class="fas fa-chevron-down currency-arrow"></i>
-          <select [(ngModel)]="editedExpense().currency" class="currency-selector">
-            <option *ngFor="let currency of currencyList" [value]="currency.abbreviation">
-              {{ currency.symbol }}
-            </option>
-          </select>
-        </div>
+        <div class="currency-selector-wrapper" (click)="toggleCurrencyDropdown()">
+          <span class="selected-currency">
+            {{ currencySymbol() }}
+          </span>
+          <i class="fas fa-chevron-down currency-arrow" [ngClass]="{ 'rotated': isCurrencyDropdownOpen() }"></i>
+        </div>       
         <input type="number" [(ngModel)]="editedExpense().amount" class="amount-input" />
+        <app-currency-dropdown 
+          [isOpen]="isCurrencyDropdownOpen()" 
+          (currencySelected)="selectCurrency($event.abbreviation)" 
+          (dropdownToggled)="isCurrencyDropdownOpen.set($event)">
+        </app-currency-dropdown>
       </div>
 
       <div class="expense-title">
@@ -59,7 +61,7 @@
         </div>
       </div>
       <div class="modal-actions">
-        <button class="save-btn" (click)="saveChanges()">Update Changes</button>
+        <button class="save-btn" [disabled]="isSaveDisabled()" (click)="saveChanges()">Update Changes</button>
       </div>
     </div>
   </div>

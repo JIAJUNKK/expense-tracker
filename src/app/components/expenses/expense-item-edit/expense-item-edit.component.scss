@@ -34,6 +34,7 @@
 
     .top-section{
       .amount-section {
+        position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -49,7 +50,6 @@
             outline: none;
           }
         }
-
         .currency-selector-wrapper {
           position: relative;
           display: flex;
@@ -60,8 +60,7 @@
           padding: 10px 15px;
           cursor: pointer;
         
-        
-          .currency-selector {
+          .selected-currency {
             appearance: none;
             background: transparent;
             border: none;
@@ -76,14 +75,14 @@
         
           .currency-arrow {
             position: absolute;
-            left: 0px; 
+            left: -10px; 
             font-size: 18px;
             color: var(--secondary-dark);
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.2s ease-in-out;
             pointer-events: none; 
-          }  
-          .currency-selector-wrapper:focus-within .currency-arrow {
-            transform: rotate(180deg);
+            &.rotated {
+              transform: rotate(180deg);
+            }
           }
         }
       }
@@ -203,12 +202,22 @@
           font-weight: bold;
           cursor: pointer;
           border: none;
+          &:disabled{
+            background-color: var(--negative-bg);
+          }
         }
       }
     }
   }
-}
 
+  ::ng-deep .currency-dropdown{
+    top: 60px;
+    max-height: calc(70vh - 60px) !important;
+    overflow-y: auto;
+  }
+  
+
+}
 .modal-overlay.slide-out {
   animation: slideOut 0.3s ease-in-out forwards;
 }
