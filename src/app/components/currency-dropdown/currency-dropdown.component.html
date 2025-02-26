@@ -1,0 +1,12 @@
+<div class="currency-dropdown" [class.show]="isOpen" (clickOutside)="closeDropdown()">
+    <div *ngFor="let currency of currenciesList" 
+         (click)="selectCurrency(currency.symbol, currency.abbreviation)" 
+         class="currency-option">
+      <span class="flag-icon">{{ currency.flag }}</span>
+      <div class="currency-text">
+        <span class="currency-code">{{ currency.abbreviation }}</span>
+        <span class="currency-name">{{ currency.symbol }}</span>
+      </div>
+    </div>
+</div>
+  

@@ -66,23 +66,11 @@
         <i class="fas fa-chevron-down" [class.rotate]="isCurrencyDropdownOpen()"></i>
       </button>
       <button class="num-btn" (click)="addDigit('0')">0</button>
-    </div>
-
-    <div class="currency-dropdown" [class.show]="isCurrencyDropdownOpen()">
-      <div *ngFor="let currency of currenciesList" 
-           (click)="selectCurrency(currency.symbol, currency.abbreviation)" 
-           class="currency-option">
-        <span class="flag-icon">{{ currency.flag }}</span>
-        <div class="currency-text">
-          <span class="currency-code">{{ currency.abbreviation }}</span>
-          <span class="currency-name">{{ currency.symbol }}</span>
-        </div>
-      </div>
-    </div>
-    
-    
+    </div>    
+    <app-currency-dropdown 
+      [isOpen]="isCurrencyDropdownOpen()" 
+      (currencySelected)="updateSelectedCurrency($event)" 
+      (dropdownToggled)="isCurrencyDropdownOpen.set($event)">
+    </app-currency-dropdown>
   </div>
-
-
-
 </div>

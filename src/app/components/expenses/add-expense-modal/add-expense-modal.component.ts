@@ -9,10 +9,11 @@ import { ExpenseService } from '../../../services/firebase/Firestore/expense.ser
 import { CurrencyService } from '../../../services/currency.service';
 import { GlobalService } from '../../../services/shared/global.service';
 
+import { CurrencyDropdownComponent } from '../../currency-dropdown/currency-dropdown.component';
 @Component({
   selector: 'app-add-expense-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CurrencyDropdownComponent ],
   templateUrl: './add-expense-modal.component.html',
   styleUrls: ['./add-expense-modal.component.scss'],
 })
@@ -75,6 +76,11 @@ export class AddExpenseModalComponent {
     this.currencySymbol.set(symbol); 
     this.expense.currency = abbreviation;
     this.isCurrencyDropdownOpen.set(false); 
+  }
+
+  updateSelectedCurrency(currency: { symbol: string; abbreviation: string }) {
+    this.currencySymbol.set(currency.symbol);
+    this.expense.currency = currency.abbreviation;
   }
 
   @HostListener('window:keydown', ['$event'])
